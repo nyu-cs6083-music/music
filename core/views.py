@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from core.models import MyUser, Like, Follow
 from artists.models import Artist
+from playlists.models import Playlist
 from django.core.urlresolvers import reverse
 from django.contrib import auth
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
@@ -13,9 +14,14 @@ import datetime
 
 def index(request):
     user = request.user if request.user.is_authenticated() else None
+    now = datetime.date.today()
+    start = now - datetime.timedelta(days=3)
+    stars = user.myuser.star.all()
+    print(len(stars))
     content = {
         'active_menu': 'index',
         'user': user,
+        'newplaylists': len(Playlist.objects.filter(year_released__gt=start)),
     }
     return render(request, "core/index.html", content)
 

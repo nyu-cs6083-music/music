@@ -35,6 +35,7 @@
                 </li>
                 <li class="list-group-item">
                         <a href="{% url 'playlists:playlist_list' uid=0 %}">Playlist</a>
+                        <span class="badge pull-right">{{ newplaylists }} new</span>
                 </li>
                 <li class="list-group-item">
                         <a href="{% url 'songs:song_list' %}">Songs</a>

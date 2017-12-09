@@ -26,6 +26,7 @@ def song_list(request):
     # return HttpResponse("Yup yup yup yup.")
     return render(request, "songs/song_list.html", context)
 
+
 def song_detail(request, id):
     song = get_object_or_404(Song, pk=id)
 
@@ -43,7 +44,7 @@ def song_new(request):
         if form.is_valid():
             song = form.save()
             messages.success(request, "Song added!")
-            return redirect("songs/song_edit.html", id=song.pk)
+            return redirect("songs:song_detail", id=song.pk)
     else:
         form = SongForm()
 
@@ -52,6 +53,7 @@ def song_new(request):
     }
 
     return render(request, "songs/song_edit.html", context)
+
 
 def song_edit (request, id):
     song = get_object_or_404(Song, pk=id)

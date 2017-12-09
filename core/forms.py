@@ -11,7 +11,7 @@ class BootstrapFormMixin(object):
             if (isinstance(field.widget, widgets.TextInput) or
                 isinstance(field.widget, widgets.Textarea)):
                 field.widget.attrs.update({
-                    "class": "form-control",     
+                    "class": "form-control",
                 })
 
 

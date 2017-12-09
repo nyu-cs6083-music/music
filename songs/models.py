@@ -17,6 +17,9 @@ class Song(models.Model):
     class Meta:
         ordering = ["name"]
 
+    def __str__(self):
+        return self.name
+
     def __unicode__(self):
         return self.name
 
@@ -25,6 +28,7 @@ class Song(models.Model):
 
     def get_absolute_url(self):
         return reverse("songs:song_detail", kwargs={"id":self.pk})
+
 
 class Rate(models.Model):
     user = models.ForeignKey('core.MyUser', related_name='rate')

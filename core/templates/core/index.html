@@ -31,7 +31,10 @@
                         <a href="{% url 'artists:artist_list' %}">Artists</a>
                 </li>
                 <li class="list-group-item">
-                        <a href="{% url 'album:album_list' %}">Albums</a>
+                        <a href="{% url 'albums:album_list' %}">Albums</a>
+                </li>
+                <li class="list-group-item">
+                        <a href="{% url 'playlists:playlist_list' %}">Playlist</a>
                 </li>
                 <li class="list-group-item">
                         <a href="{% url 'songs:song_list' %}">Songs</a>
@@ -39,6 +42,7 @@
                 <li class="list-group-item">
                         <a href="{% url 'core:user_list' %}">Users</a>
                 </li>
+
             </ul>
         </div>
     </div>

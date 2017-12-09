@@ -1,21 +1,22 @@
 {% extends "core/base.html" %}
-
+{% block title %}Playlists{% endblock %}
 {% block content %}
-<div class="jumbotron">
-  <h1>
-    playlists THIS IS LIST
-  </h1>
-</div>
-
+    <h1 class="page-header">Playlists</h1>
+    <div class="row">
+        <div class="col-md-3 pull-right">
+            <a href="{% url 'playlists:playlist_edit' %}">
+                <button class="btn btn-primary">
+                    Create New Playlist
+                </button>
+            </a>
+        </div>
+    </div>
 
 {% for playlist in playlists  %}
-<div class="albums">
 <p>
-    <a href="{{playlist.get_absolute_url}}">
-              <li>{{playlist.playlist_name}}</li>
+    <a href="{{ playlist.get_absolute_url }}">
+        <li>{{ playlist.playlist_name }}</li>
     </a>
 </p>
 {% endfor %}
-
-</div>
 {% endblock content %}

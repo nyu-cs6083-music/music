@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -10,8 +11,11 @@ class MyUser(models.Model):
     nickname = models.CharField(max_length=16)
     ucity = models.CharField(max_length=16)
 
+    def __str__(self):
+        return self.nickname
+
     def __unicode__(self):
-        return self.user.username
+        return self.nickname
 
     def get_absolute_url(self):
         return reverse("core:user_detail", kwargs={"id":self.pk})

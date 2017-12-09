@@ -1,0 +1,23 @@
+{% extends "core/base.html" %}
+{% block title %}{{ playlist.playlist_name }}{% endblock %}
+{% block content %}
+<h1 class="page-header">{{ playlist.playlist_name }}</h1>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-2">
+        <ul>
+            <li>{{ playlist.playlist_name }}</li>
+            <li>{{ playlist.creator.nickname }}</li>
+            <li>{{ playlist.year_released }}</li>
+            <li>Song:</li>
+            <ul>
+            {% for song in songs %}
+                <a href="{{ song.get_absolute_url }}" class="">
+                    <li>{{ song.name }}</li>
+                </a>
+            {% endfor %}
+            </ul>
+        </ul>
+    </div>
+</div>
+{% endblock content %}

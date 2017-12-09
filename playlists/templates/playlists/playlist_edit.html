@@ -1,5 +1,24 @@
 {% extends "core/base.html" %}
 
+{% block title %}Create Playlist{% endblock %}
 {% block content %}
-    <h2>hello world </h2>
+{% load bootstrap %}
+    <h2>New Playlist</h2>
+
+    <form action="" method="POST" class="input_form">
+        {% csrf_token %}
+
+        {{ form|bootstrap }}
+
+        <button type="submit" class="btn btn-primary btn-block save_button">
+            Save
+        </button>
+
+    </form>
 {% endblock content %}
+
+
+
+
+
+

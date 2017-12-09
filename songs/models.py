@@ -2,7 +2,6 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from music import conf
 from embed_video.fields import EmbedVideoField
-from djangoratings.fields import RatingField
 
 class Song(models.Model):
     #song name
@@ -14,9 +13,6 @@ class Song(models.Model):
     #song url
     video = EmbedVideoField(verbose_name='My video',
                             help_text='This is a help text')
-    #song rate
-    score = RatingField(range=5, can_change_vote=True,
-                        allow_delete=True)
     class Meta:
         ordering = ["name"]
 

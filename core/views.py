@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from .forms import MyUserForm
 from django.contrib import messages
+import datetime
 
 def index(request):
     user = request.user if request.user.is_authenticated() else None
@@ -154,11 +155,13 @@ def user_list(request):
             Q(name__icontains=query)
         )
         users = users.distinct()
-
+    now = datetime.date.today()
+    start = now - datetime.timedelta(days=3)
     datas = map(
         lambda x: {
             "user": x,
             "num": (lambda y: len(y) if y else 0)(x.playlist.all()),
+            "new": (lambda y: len(y) if y else 0)(x.playlist.filter(year_released__gt=start)),
         },users)
 
     context = {

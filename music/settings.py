@@ -39,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'embed_video',
     'bootstrapform',
-    'djangoratings',
     'albums',
     'artists',
     'songs',

@@ -16,7 +16,7 @@
                 {% for data in datas %}
                 <tr>
                     <td>{{ data.user.nickname }}</td>
-                    <td>{{ data.num }}</td>
+                    <td>{{ data.num }} <span class="badge">{{ data.new }} new</span></td>
                     <td>
                         <a href="{{ data.user.get_absolute_url }}">
                         <button class="btn btn-info">Detail</button>

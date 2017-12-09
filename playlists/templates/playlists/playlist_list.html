@@ -1,7 +1,14 @@
 {% extends "core/base.html" %}
 {% block title %}Playlists{% endblock %}
 {% block content %}
-    <h1 class="page-header">Playlists</h1>
+    {% if creator %}
+        <h1 class="page-header">
+            <a href="{{ creator.get_absolute_url }}">
+                {{ creator.nickname }}
+            </a>'s Playlists</h1>
+    {% else %}
+        <h1 class="page-header">Playlists</h1>
+    {% endif %}
     <div class="row">
         <div class="col-md-3 pull-right">
             <a href="{% url 'playlists:playlist_edit' %}">

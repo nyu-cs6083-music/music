@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 from django.core.urlresolvers import reverse
 from .models import Playlist
+from core.models import MyUser
 from .forms import PlaylistForm
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -9,12 +10,16 @@ from django.contrib import messages
 
 
 @login_required
-def playlist_list(request):
-    playlists = Playlist.objects.all()
-
+def playlist_list(request, uid):
+    if uid == '0':
+        playlists = Playlist.objects.all()
+        creator = None
+    else:
+        playlists = Playlist.objects.filter(creator_id=uid)
+        creator = MyUser.objects.get(pk=uid)
     context = {
         "playlists":playlists,
-
+        "creator": creator,
     }
 
     return render(request, "playlists/playlist_list.html", context)

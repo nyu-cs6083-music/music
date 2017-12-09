@@ -9,7 +9,7 @@
             <div class="pull-right">
                 {% if state == 'follow' %}
                     <button class="btn btn-primary" type="submit" id="unfollow">Unfollow</button>
-                {% else %}
+                {% elif not editable %}
                     <button class="btn btn-primary" type="submit" id="follow">Follow</button>
                 {% endif %}
             </div>
@@ -25,10 +25,20 @@
         {% endif %}
     </div>
     <div class="row">
-        <h3><span class="glyphicon glyphicon-send"> Email</span><br></h3>
+        <h3><span class="glyphicon glyphicon-envelope"> Email</span><br></h3>
             <div class="col-md-4 col-md-offset-1">
                 <ul class="list-unstyled">
                     <li>{{user.user.email}}</li>
+                </ul>
+            </div>
+    </div>
+    <div class="row">
+        <h3><span class="glyphicon glyphicon-th-list"> Playlists</span><br></h3>
+            <div class="col-md-4 col-md-offset-1">
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'playlists:playlist_list' uid=user.pk%}">
+                        Go to playlists.
+                    </a></li>
                 </ul>
             </div>
     </div>
@@ -36,7 +46,9 @@
         <div class="row">
             <div class="col-md-2 col-md-offset-5">
                 <a href="{% url 'core:user_edit' %}">
-                    <button class="btn btn-primary">Edit</button>
+                    <button class="btn btn-primary">
+                        <span class="glyphicon glyphicon-pencil"> Edit</span>
+                    </button>
                 </a>
             </div>
         </div>

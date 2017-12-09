@@ -57,11 +57,12 @@ def song_play(request, id, ptype, sid):
     else:
         raise Http404    
     """
-    print(id, ptype, sid)
+
     context = {
         "song": song,
+        "artist": song.artists,
     }
-    return render(request, "songs/song_detail.html", context)
+    return render(request, "songs/song_play.html", context)
 
 
 def song_new(request):

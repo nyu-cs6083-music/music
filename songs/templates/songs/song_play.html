@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+{% load embed_video_tags %}
+{% block title %}{{song.name}}{% endblock %}
+{% block content %}
+    <div class="row">
+        <h2>
+            Song: {{song.name}}
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-md-5 col-offset-1">
+            <p class="lead">Artist:
+                <small><a href="{{ artist.get_absolute_url }}">{{ artist.name }}</a></small>
+            </p>
+        </div>
+    </div>
+    {% video song.video as my_video %}
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <pre>
+                    Backend: {{ my_video.backend }}
+                    URL: {{ my_video.url }}
+                    Code: {{ my_video.code }}
+                    Thumbnail: {{ my_video.thumbnail }}
+                    HTTPS: {% if my_video.protocol == 'https' %}Yes{% else %}No{% endif %}
+                </pre>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-1">
+                {% video my_video "large" %}
+            </div>
+    {% endvideo %}
+    </div>
+
+
+{% endblock content %}  
+
+

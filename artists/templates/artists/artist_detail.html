@@ -13,8 +13,13 @@
                 {% endif %}
             </div>
         </div>
-        <hr>
-        {{artist.get_song_names}}
+        <ul class="list-unstyled">
+        {% for song in songs %}
+
+              <li><a href="{{ song.get_absolute_url }}">{{ song.name }}</a></li>
+
+        {% endfor %}
+        </ul>
     </div>
     <script>
         function getCookie(name) {

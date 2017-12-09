@@ -34,10 +34,11 @@ def artist_detail(request, id):
     state = 'unlike'
     if Like.objects.filter(user=user.myuser, artist=artist):
         state = 'like'
-
+    songs = artist.song.all()
     context = {
         "state": state,
         "artist": artist,
+        "songs": songs,
     }
 
     # return HttpResponse("Here are the artists")

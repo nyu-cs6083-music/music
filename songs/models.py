@@ -9,7 +9,7 @@ class Song(models.Model):
     #song length
     length = models.DurationField()
     #song artists
-    artists = models.ForeignKey("artists.Artist")
+    artists = models.ForeignKey("artists.Artist", related_name="song")
     #song url
     video = EmbedVideoField(verbose_name='My video',
                             help_text='This is a help text')

@@ -203,6 +203,17 @@ def like_list(request):
     return render(request, "core/like_list.html", context)
 
 @login_required
+def follow_list(request):
+    user = request.user.myuser
+    follow = Follow.objects.filter(fan=user)
+    stars = [f.star for f in follow]
+    context = {
+        "stars": stars,
+    }
+    return render(request, "core/follow_list.html", context)
+
+
+@login_required
 def follow_user(request):
     userself = request.user.myuser
     if request.method == 'POST':

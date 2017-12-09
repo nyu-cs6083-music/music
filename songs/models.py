@@ -34,4 +34,12 @@ class Rate(models.Model):
     user = models.ForeignKey('core.MyUser', related_name='rate')
     song = models.ForeignKey('Song', related_name='rate')
     score = models.IntegerField(default=0, choices=conf.RATESCORE.choice())
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now=True)
+
+
+class Play(models.Model):
+    user = models.ForeignKey('core.MyUser', related_name='play')
+    song = models.ForeignKey('Song', related_name='play')
+    ptype = models.IntegerField(default=2, choices=conf.SOURCETYPE.choice())
+    sourceid = models.IntegerField(null=True)
+    timestamp = models.DateTimeField(auto_now=True)

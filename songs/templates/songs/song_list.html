@@ -25,7 +25,9 @@
                         </a>
                     </td>
                     <td>
-                        <button class="btn btn-success">Play</button>
+                        <a href="{% url 'songs:song_play' id=song.pk ptype=2 sid=0%}" class="">
+                            <button class="btn btn-success">Play</button>
+                        </a>
                     </td>
                     <td>
                         <button class="btn btn-success">Addlist</button>

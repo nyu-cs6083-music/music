@@ -1,3 +1,5 @@
-Django==1.8.6
+Django>1.8.6
 django-inspect
 django-embed-video
+django-bootstrap-form
+django-ratings

@@ -26,8 +26,6 @@ def playlist_detail(request, id):
         playlist = Playlist.objects.get(pk=id)
     except Playlist.DoesNotExist:
         raise Http404
-    songs = playlist.song.all()
-    print(len(songs))
     context = {
         "playlist": playlist,
         "songs": playlist.song.all(),
@@ -40,13 +38,9 @@ def playlist_edit(request):
     if request.method == "POST":
         form = PlaylistForm(request.POST)
         if form.is_valid():
-            #playlist = form.save(request.user.myuser)
             playlist = form.save()
-            print(playlist.__dict__)
             playlist.creator = request.user.myuser
             playlist.save()
-            print(playlist.__dict__)
-            print("contain:", len(playlist.song.all()))
             messages.success(request, "Playlist added!")
             return redirect("playlists:playlist_detail", id=playlist.pk)
     else:

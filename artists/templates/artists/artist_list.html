@@ -2,11 +2,9 @@
 {% load staticfiles %}
 {% block title %}Artists{% endblock %}
 {% block content %}
-
-    <div class = "information_list">
-        <h1 class="page-header">Artists</h1>
+    <h1 class="page-header">Artists</h1>
+    <div class = "rowt">
         <table class="table table-hover">
-        <hr>
         {% if artists %}
             <thead>
                 <tr>
@@ -36,5 +34,4 @@
         <hr>
         </table>
     </div>
-
 {% endblock content %}

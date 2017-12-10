@@ -1,0 +1,65 @@
+{% extends "core/base.html" %}
+{% block title %}Play Records{% endblock %}
+{% block content %}
+    <h1 class="page-header">
+        <a href="{{ user.get_absolute_url }}">
+            {{ user.nickname }}
+        </a>
+            's Play Records
+    </h1>
+    <div class="row">
+
+        {% if plays %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Song</th>
+                        <th>Time</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for play in plays %}
+                    <tr>
+                        <td><a href="{{ play.song.get_absolute_url }}">
+                            {{ play.song.name }}</a>
+                        </td>
+                        <td>{{ play.timestamp }}</td>
+                        <td>
+                            {% if play.ptype == 0 %}
+                                <a href="{% url 'playlists:playlist_detail' id=play.sourceid %}">
+                                    Playlist
+                                </a>
+                            {% elif play.ptype == 1 %}
+                                <a href="{% url 'albums:album_details' id=play.sourceid %}">
+                                    Album
+                                </a>
+                            {% elif play.ptype == 2 %}
+                                <a href="{% url 'songs:song_list' %}">
+                                    List
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No play records found.</p>
+        {% endif %}
+
+    </div>
+
+{% endblock content %}  
+
+
+
+
+
+
+
+
+
+
+
+

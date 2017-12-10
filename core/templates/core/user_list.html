@@ -8,6 +8,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Playlists</th>
+                    <th>Play Records</th>
                     <th>Detial</th>
                     <th>Follow</th>
                 </tr>
@@ -19,6 +20,11 @@
                     <td>{{ data.num }}
                         <a href="{% url 'playlists:playlist_list' uid=data.user.pk %}" class="">
                             <span class="badge">{{ data.new }} new</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'songs:play_list' id=data.user.pk %}">
+                        <button class="btn btn-info">Records</button>
                         </a>
                     </td>
                     <td>

@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="row">
+  <h1>
+    Albums THIS IS DEAILS
+  </h1>
+</div>
+
+
+<div class="row">
+<p>
+    <li><a href="{{album.get_absolute_url}}">
+        {{albums.artist_name}}</a>
+    </li>
+    <li>{{albums.year_released}}</li>
+
+</p>
+
+</div>
+{% endblock content %}

@@ -2,12 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.db.models import Count, Q
-
+from django.contrib.auth.decorators import login_required
 from .models import Song, Rate, Play
-from artists.models import Artist
+from core.models import MyUser
 from .forms import SongForm
 
 
+@login_required
 def song_list(request):
     songs = Song.objects.all()
 
@@ -42,21 +43,20 @@ def song_play(request, id, ptype, sid):
         song = Song.objects.get(pk=id)
     except Song.DoesNotExist:
         raise Http404
-    """
-    if ptype == 1 or ptype == 0:
+
+    if ptype == '1' or ptype == '0':
         play = Play(user=request.user.myuser,
                     song=song,
                     ptype=ptype,
                     sourceid=sid)
         play.save()
-    elif ptype == 2:
+    elif ptype == '2':
         play = Play(user=request.user.myuser,
                     song=song,
                     ptype=ptype)
         play.save()
     else:
-        raise Http404    
-    """
+        raise Http404
 
     context = {
         "song": song,
@@ -103,7 +103,22 @@ def song_edit (request, id):
     return render(request, "songs/song_edit.html", context)
 
 
+@login_required
+def play_list(request, id):
 
+    try:
+        user = MyUser.objects.get(pk=id)
+    except MyUser.DoesNotExist:
+        raise Http404
+
+    plays = Play.objects.filter(user_id=id)
+
+    context = {
+        "plays": plays,
+        "user": user,
+    }
+
+    return render(request, "songs/play_list.html", context)
 
 
 

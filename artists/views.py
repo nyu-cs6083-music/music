@@ -9,6 +9,7 @@ from .models import Artist
 from core.models import Like
 from .forms import ArtistForm
 
+
 @login_required
 def artist_list(request):
 
@@ -27,7 +28,7 @@ def artist_list(request):
     # return HttpResponse("Here be I.")
     return render (request, "artists/artist_list.html", context)
 
-@login_required
+
 def artist_detail(request, id):
     artist = get_object_or_404(Artist, pk=id)
     user = request.user

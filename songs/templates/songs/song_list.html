@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-
+{% block title %}Songlist{% endblock %}
 {% block content %}
     <div class="information_list">
         <h1 class="page-header">Songs</h1>
@@ -17,7 +17,7 @@
             <tbody>
             {% for song in songs %}
                 <tr>
-                    <td>{{song.name}}</td>
+                    <td>{{ song.name }}</td>
                     <td>
                         <a href="{{ song.get_absolute_url }}">
                         <button class="btn btn-info">Detail</button>

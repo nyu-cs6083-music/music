@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.core.urlresolvers import reverse
 from .models import Playlist
@@ -16,7 +16,6 @@ def playlist_list(request, uid):
         creator = None
     else:
         playlists = Playlist.objects.filter(creator_id=uid)
-        print(uid)
         creator = MyUser.objects.get(pk=uid)
     context = {
         "playlists":playlists,
@@ -32,9 +31,16 @@ def playlist_detail(request, id):
         playlist = Playlist.objects.get(pk=id)
     except Playlist.DoesNotExist:
         raise Http404
+    user = request.user.myuser
+    creator = playlist.creator
+    if creator.pk == user.pk:
+        editable = True
+    else:
+        editable = False
     context = {
         "playlist": playlist,
         "songs": playlist.song.all(),
+        "editable": editable,
     }
 
     return render(request, "playlists/playlist_detail.html", context)
@@ -56,4 +62,24 @@ def playlist_new(request):
         "form":form,
     }
 
-    return render(request, "playlists/playlist_new.html", context)
+    return render(request, "playlists/playlist_edit.html", context)
+
+def playlist_edit (request, id):
+    playlist = get_object_or_404(Playlist, pk=id)
+
+    if request.method == "POST":
+        form = PlaylistForm(request.POST, instance=playlist)
+        if form.is_valid():
+            playlist = form.save()
+            messages.success(request, "Song updated!")
+            return redirect("playlists:playlist_detail", id=playlist.pk)
+
+    else:
+        form = PlaylistForm(instance=playlist)
+
+    context = {
+        "form": form,
+        "playlist": playlist,
+    }
+
+    return render(request, "playlists/playlist_edit.html", context)

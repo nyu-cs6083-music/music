@@ -88,7 +88,7 @@ def song_edit (request, id):
     if request.method == "POST":
         form = SongForm(request.POST, instance=song)
         if form.is_valid():
-            song=form.save()
+            song = form.save()
             messages.success(request, "Song updated!")
             return redirect("songs:song_detail", id=song.pk)
 

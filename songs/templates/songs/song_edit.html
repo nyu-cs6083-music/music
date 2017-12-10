@@ -1,10 +1,11 @@
 {% extends "core/base.html" %}
 
+{% block title %}Song{% endblock %}
 {% block content %}
     {% if song %}
-        <h2>Edit: {{song.name}}</h2>
+        <h1 class="page-header">Edit: {{song.name}}</h1>
     {% else %}
-        <h2>New Song</h2>
+        <h1 class="page-header">New Song</h1>
     {% endif %}
 
     <form action="" method="POST" class="input_form">

@@ -1,9 +1,13 @@
 {% extends "core/base.html" %}
 
-{% block title %}Create Playlist{% endblock %}
+{% block title %}Playlist{% endblock %}
 {% block content %}
 {% load bootstrap %}
-    <h2>New Playlist</h2>
+        {% if playlist %}
+            <h1 class="page-header">Edit: {{playlist.name}}</h1>
+        {% else %}
+            <h1 class="page-header">New Playlist</h1>
+        {% endif %}
 
     <form action="" method="POST" class="input_form">
         {% csrf_token %}

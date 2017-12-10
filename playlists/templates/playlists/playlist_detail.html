@@ -2,7 +2,17 @@
 {% block title %}{{ playlist.playlist_name }}{% endblock %}
 {% block content %}
 <h1 class="page-header">{{ playlist.playlist_name }}</h1>
-
+    {% if editable %}
+        <div class="row">
+            <div class="col-md-2 pull-right">
+                <a href="{% url 'playlists:playlist_edit' id=playlist.pk %}">
+                    <button class="btn btn-primary">
+                        <span class="glyphicon glyphicon-pencil"> Edit</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    {% endif %}
 <div class="row">
     <div class="col-md-6 col-md-offset-2">
         <ul>

@@ -11,7 +11,7 @@
     {% endif %}
     <div class="row">
         <div class="col-md-3 pull-right">
-            <a href="{% url 'playlists:playlist_edit' %}">
+            <a href="{% url 'playlists:playlist_new' %}">
                 <button class="btn btn-primary">
                     Create New Playlist
                 </button>
@@ -21,7 +21,7 @@
 
 {% for playlist in playlists  %}
 <p>
-    <a href="{{ playlist.get_absolute_url }}">
+    <a href="{% url 'playlists:playlist_detail' id=playlist.pk %}">
         <li>{{ playlist.playlist_name }}</li>
     </a>
 </p>

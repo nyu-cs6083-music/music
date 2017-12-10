@@ -16,6 +16,7 @@ def playlist_list(request, uid):
         creator = None
     else:
         playlists = Playlist.objects.filter(creator_id=uid)
+        print(uid)
         creator = MyUser.objects.get(pk=uid)
     context = {
         "playlists":playlists,
@@ -39,7 +40,7 @@ def playlist_detail(request, id):
     return render(request, "playlists/playlist_detail.html", context)
 
 
-def playlist_edit(request):
+def playlist_new(request):
     if request.method == "POST":
         form = PlaylistForm(request.POST)
         if form.is_valid():
@@ -55,4 +56,4 @@ def playlist_edit(request):
         "form":form,
     }
 
-    return render(request, "playlists/playlist_edit.html", context)
+    return render(request, "playlists/playlist_new.html", context)

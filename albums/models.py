@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Album(models.Model):
     album_name = models.CharField(max_length=250)
-    year_released = models.DateField(max_length=8)
+    year_released = models.DateField(max_length=8,auto_now=True)
     track = models.ManyToManyField('songs.Song', related_name='album')
 
     def __str__(self):

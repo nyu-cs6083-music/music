@@ -23,10 +23,14 @@ class MyUser(models.Model):
     def get_follow(self):
         return "\n".join([s.user.username for s in self.star.all()])
 
+    def key(self):
+        return "user__" + str(self.pk)
+
+
 class Like(models.Model):
     user = models.ForeignKey('MyUser', related_name='like')
     artist = models.ForeignKey('artists.Artist', related_name='like')
-    timestamp = models.DateTimeField(null=True, blank=True, auto_now=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('user', 'artist')

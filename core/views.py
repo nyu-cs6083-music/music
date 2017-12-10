@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from core.models import MyUser, Like, Follow
 from artists.models import Artist
 from playlists.models import Playlist
+from songs.models import Song
+from albums.models import Album
 from django.core.urlresolvers import reverse
 from django.contrib import auth
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
@@ -11,17 +13,32 @@ from django.db.models import Count, Q
 from .forms import MyUserForm
 from django.contrib import messages
 import datetime
+from django.core.cache import cache
 
 def index(request):
     user = request.user if request.user.is_authenticated() else None
     now = datetime.date.today()
-    start = now - datetime.timedelta(days=3)
-    stars = user.myuser.star.all()
-    print(len(stars))
+    start = now - datetime.timedelta(days=1)
+
+    res = cache.get(user.myuser.key())
+    if not res:
+        res = {}
+        res['playlist'] = len(Playlist.objects.filter(year_released__gt=start))
+        res['artist'] = len(user.myuser.like.filter(timestamp__gt=start))
+        res['user'] = len(user.myuser.star.filter(timestamp__gt=start))
+        res['song'] = len(Song.objects.filter(year_released__gt=start))
+        res['album'] = len(Album.objects.filter(year_released__gt=start))
+
+        cache.set(user.myuser.key(), res, 12 * 60 * 60)
+
     content = {
         'active_menu': 'index',
         'user': user,
-        'newplaylists': len(Playlist.objects.filter(year_released__gt=start)),
+        'newartists': res['artist'],
+        'newplaylists': res['playlist'],
+        'newusers': res['user'],
+        'newsongs': res['song'],
+        'newalbums': res['album'],
     }
     return render(request, "core/index.html", content)
 

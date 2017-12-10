@@ -29,9 +29,11 @@
             <ul class="list-group">
                 <li class="list-group-item">
                         <a href="{% url 'artists:artist_list' %}">Artists</a>
+                        <span class="badge pull-right">{{ newalbums }} new</span>
                 </li>
                 <li class="list-group-item">
                         <a href="{% url 'albums:album_list' %}">Albums</a>
+                    <span class="badge pull-right">{{ newartists }} new</span>
                 </li>
                 <li class="list-group-item">
                         <a href="{% url 'playlists:playlist_list' uid=0 %}">Playlist</a>
@@ -39,9 +41,11 @@
                 </li>
                 <li class="list-group-item">
                         <a href="{% url 'songs:song_list' %}">Songs</a>
+                        <span class="badge pull-right">{{ newsongs }} new</span>
                 </li>
                 <li class="list-group-item">
-                        <a href="{% url 'core:user_list' %}">Users</a>
+                        <a href="{% url 'core:follow_list' %}">Follows</a>
+                        <span class="badge pull-right">{{ newusers }} new</span>
                 </li>
 
             </ul>

@@ -13,6 +13,8 @@ class Song(models.Model):
     #song url
     video = EmbedVideoField(verbose_name='My video',
                             help_text='This is a help text')
+    #song time
+    year_released = models.DateField(max_length=8, auto_now=True)
     class Meta:
         ordering = ["name"]
 

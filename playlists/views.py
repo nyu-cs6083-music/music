@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.core.urlresolvers import reverse
 from .models import Playlist
+from .filters import PlaylistFilter
 from core.models import MyUser
 from .forms import PlaylistForm
 from django.http import HttpResponse
@@ -17,9 +18,11 @@ def playlist_list(request, uid):
     else:
         playlists = Playlist.objects.filter(creator_id=uid)
         creator = MyUser.objects.get(pk=uid)
+    f = PlaylistFilter(request.GET, queryset=playlists)
     context = {
         "playlists":playlists,
         "creator": creator,
+        "filter": f,
     }
 
     return render(request, "playlists/playlist_list.html", context)

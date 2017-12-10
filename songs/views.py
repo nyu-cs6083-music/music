@@ -23,7 +23,7 @@ def song_list(request):
     context = {
         "songs": songs,
     }
-    # return HttpResponse("Yup yup yup yup.")
+
     return render(request, "songs/song_list.html", context)
 
 

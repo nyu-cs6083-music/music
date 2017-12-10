@@ -18,12 +18,59 @@
             </a>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-0">
+            <form class="form-inline" action="" method="get" id="filters">
+                <div class="form-group">
+                    {{ filter.form.as_p }}
+                    <button class="btn btn-default" type="submit">
+                        Search
+                    </button>
+                </div>
 
-{% for playlist in playlists  %}
-<p>
-    <a href="{% url 'playlists:playlist_detail' id=playlist.pk %}">
-        <li>{{ playlist.playlist_name }}</li>
-    </a>
-</p>
-{% endfor %}
+            </form>
+
+            <script LANGUAGE="JavaScript">
+                function doReset(){
+                    var _elements=document.getElementById("filters").elements,
+                        _elementsLen=_elements.length,
+                        _ei=null,
+                        i=0;
+                    for(;i<_elementsLen;i++){
+                        _ei=_elements[i];
+                        (_ei.type=="text"||_ei.type=="textarea")&&(_ei.value="");
+                    }
+                    window.location.href = '{% url 'playlists:playlist_list' uid=0 %}';
+                }
+            </script>
+            <button class="btn btn-default" onClick="doReset()">
+                Clear
+            </button>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Creator</th>
+                <th>Release Time</th>
+                <th>Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for playlist in filter.qs %}
+                <tr>
+                    <td>{{ playlist.playlist_name }}</td>
+                    <td><a href="{{ playlist.creator.get_absolute_url }}">
+                        {{ playlist.creator.nickname }}</a></td>
+                    <td>{{ playlist.year_released }}</td>
+                    <td>
+                        <a href="{% url 'playlists:playlist_detail' id=playlist.pk %}">
+                        <button class="btn btn-info">Detail</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock content %}

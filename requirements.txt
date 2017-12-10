@@ -3,3 +3,4 @@ django-inspect
 django-embed-video
 django-bootstrap-form
 django-redis
+django-filter

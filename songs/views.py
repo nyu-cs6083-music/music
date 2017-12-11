@@ -5,7 +5,7 @@ from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
 from .models import Song, Rate, Play
 from core.models import MyUser
-from .forms import SongForm
+from .forms import SongForm, RateForm
 from .filters import SongFilter
 from django.http import response
 from music.conf import anti_spider
@@ -131,7 +131,26 @@ def play_list(request, id):
     return render(request, "songs/play_list.html", context)
 
 
+@login_required
+def song_torate (request, id):
+    song = get_object_or_404(Song, pk=id)
+    if request.method == 'POST':
+        form = RateForm(request.POST, instance=song)
+        if form.is_valid():
+            rate = form.save();
+            rate.creator = request.user.myuser
+            rate.save()
+            messages.success(request, "Rate success!")
+            return redirect("songs:song_detail", id=song.pk)
+    else:
+        form = RateForm(instance=song)
 
+    context = {
+        "form": form,
+        "song": song,
+    }
+
+    return render(request, "songs/song_edit.html", context)
 
 
 

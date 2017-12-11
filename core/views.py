@@ -7,29 +7,39 @@ from songs.models import Song
 from albums.models import Album
 from django.core.urlresolvers import reverse
 from django.contrib import auth
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse, response
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from .forms import MyUserForm
+from music.conf import anti_spider
 from django.contrib import messages
 import datetime
 from django.core.cache import cache
 
 def index(request):
     user = request.user if request.user.is_authenticated() else None
-    now = datetime.date.today()
-    start = now - datetime.timedelta(days=1)
+    if user:
+        now = datetime.date.today()
+        start = now - datetime.timedelta(days=1)
 
-    res = cache.get(user.myuser.key())
-    if not res:
-        res = {}
-        res['playlist'] = len(Playlist.objects.filter(year_released__gt=start))
-        res['artist'] = len(user.myuser.like.filter(timestamp__gt=start))
-        res['user'] = len(user.myuser.star.filter(timestamp__gt=start))
-        res['song'] = len(Song.objects.filter(year_released__gt=start))
-        res['album'] = len(Album.objects.filter(year_released__gt=start))
+        res = cache.get(user.myuser.key())
+        if not res:
+            res = {}
+            res['playlist'] = len(Playlist.objects.filter(year_released__gt=start))
+            res['artist'] = len(user.myuser.like.filter(timestamp__gt=start))
+            res['user'] = len(user.myuser.star.filter(timestamp__gt=start))
+            res['song'] = len(Song.objects.filter(year_released__gt=start))
+            res['album'] = len(Album.objects.filter(year_released__gt=start))
 
-        cache.set(user.myuser.key(), res, 12 * 60 * 60)
+            cache.set(user.myuser.key(), res, 12 * 60 * 60)
+    else:
+        res = {
+            'playlist': 0,
+            'artist': 0,
+            'user': 0,
+            'song': 0,
+            'album': 0,
+        }
 
     content = {
         'active_menu': 'index',
@@ -129,6 +139,14 @@ def set_password(request):
 
 @login_required
 def user_detail(request, id):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
     user = get_object_or_404(MyUser, pk=id)
     loginuser = request.user
     state = 'unfollow'
@@ -171,11 +189,19 @@ def user_edit(request):
 
 @login_required
 def user_list(request):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
     users = MyUser.objects.all()
     query = request.GET.get("q")
     if query:
         users = users.filter(
-            Q(name__icontains=query)
+            Q(nickname__icontains=query)
         )
         users = users.distinct()
     now = datetime.date.today()
@@ -190,7 +216,7 @@ def user_list(request):
     context = {
         "datas": datas,
     }
-    # return HttpResponse("Yup yup yup yup.")
+
     return render(request, "core/user_list.html", context)
 
 
@@ -220,6 +246,14 @@ def like_artist(request):
 
 @login_required
 def like_list(request):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
     user = request.user.myuser
     likes = Like.objects.filter(user=user)
     artists = [l.artist for l in likes]
@@ -230,6 +264,14 @@ def like_list(request):
 
 @login_required
 def follow_list(request):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
     user = request.user.myuser
     follow = Follow.objects.filter(fan=user)
     stars = [f.star for f in follow]

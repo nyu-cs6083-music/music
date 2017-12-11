@@ -6,10 +6,20 @@ from django.contrib.auth.decorators import login_required
 from .models import Song, Rate, Play
 from core.models import MyUser
 from .forms import SongForm
+from django.http import response
+from music.conf import anti_spider
 
 
 @login_required
 def song_list(request):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
     songs = Song.objects.all()
 
     query = request.GET.get("q")
@@ -29,6 +39,14 @@ def song_list(request):
 
 
 def song_detail(request, id):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
     song = get_object_or_404(Song, pk=id)
     context = {
         "song": song,

@@ -1,5 +1,3 @@
-from django.utils.translation import ugettext_lazy as _
-
 
 class EnumChoice(object):
 
@@ -56,3 +54,11 @@ SOURCETYPE = EnumChoice(
     (1, 'A'),
     (2, 'NULL')
 )
+
+
+def anti_spider(request):
+    http_user_agent = request.META.get('HTTP_USER_AGENT')
+    http_user_agent = str(http_user_agent).lower()
+    if "py" in http_user_agent or "ssl" in http_user_agent:
+        return True
+    return False

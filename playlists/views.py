@@ -5,13 +5,22 @@ from .models import Playlist
 from .filters import PlaylistFilter
 from core.models import MyUser
 from .forms import PlaylistForm
-from django.http import HttpResponse
+from django.http import response
+from music.conf import anti_spider
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
 @login_required
 def playlist_list(request, uid):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
     if uid == '0':
         playlists = Playlist.objects.all()
         creator = None
@@ -29,6 +38,13 @@ def playlist_list(request, uid):
 
 
 def playlist_detail(request, id):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
 
     try:
         playlist = Playlist.objects.get(pk=id)

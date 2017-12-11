@@ -37,6 +37,9 @@ class Rate(models.Model):
     score = models.IntegerField(default=0, choices=conf.RATESCORE.choice())
     timestamp = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ('user', 'song')
+
 
 class Play(models.Model):
     user = models.ForeignKey('core.MyUser', related_name='play')

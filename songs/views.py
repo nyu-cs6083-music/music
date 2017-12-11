@@ -89,7 +89,7 @@ def song_new(request):
         "form":form,
     }
 
-    return render(request, "songs/song_edit.html", context)
+    return render(request, "songs/song_rate.html", context)
 
 
 def song_edit (request, id):
@@ -110,7 +110,7 @@ def song_edit (request, id):
         "song": song,
     }
 
-    return render(request, "songs/song_edit.html", context)
+    return render(request, "songs/song_rate.html", context)
 
 
 @login_required
@@ -134,8 +134,13 @@ def play_list(request, id):
 @login_required
 def song_torate (request, id):
     song = get_object_or_404(Song, pk=id)
+    try:
+        rate = Rate.objects.get(user=request.user.myuser, song=song)
+    except Rate.DoesNotExist:
+        rate = Rate(user=request.user.myuser, song=song, score=1)
+
     if request.method == 'POST':
-        form = RateForm(request.POST, instance=song)
+        form = RateForm(request.POST, instance=rate)
         if form.is_valid():
             rate = form.save();
             rate.creator = request.user.myuser
@@ -143,14 +148,14 @@ def song_torate (request, id):
             messages.success(request, "Rate success!")
             return redirect("songs:song_detail", id=song.pk)
     else:
-        form = RateForm(instance=song)
+        form = RateForm(instance=rate)
 
     context = {
         "form": form,
         "song": song,
     }
 
-    return render(request, "songs/song_edit.html", context)
+    return render(request, "songs/song_rate.html", context)
 
 
 

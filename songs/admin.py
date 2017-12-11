@@ -19,7 +19,7 @@ class PlayAdmin(admin.ModelAdmin):
         "timestamp",
     ]
 
-class RateAdmin (admin.ModelAdmin):
+class RateAdmin(admin.ModelAdmin):
     list_display = [
         "user",
         "song",

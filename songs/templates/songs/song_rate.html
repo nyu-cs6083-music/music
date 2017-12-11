@@ -1,13 +1,9 @@
 {% extends "core/base.html" %}
-
+{% block title %}Rate {{ song.name }}{% endblock %}
 {% block content %}
 {% load bootstrap %}
 
-        {% if song %}
-            <h1 class="page-header">Edit: {{song.name}}</h1>
-        {% else %}
-            <h1 class="page-header">New Song Rate</h1>
-        {% endif %}
+    <h1 class="page-header">Rate: {{song.name}}</h1>
 
     <form action="" method="POST" class="input_form">
         {% csrf_token %}

@@ -1,13 +1,15 @@
 {% extends "core/base.html" %}
+
 {% load embed_video_tags %}
 {% block title %}{{song.name}}{% endblock %}
 {% block content %}
+
     <div class="row">
         <h2>
             Song: {{song.name}}
             <div class="pull-right">
-                <a href="{% url 'songs:song_edit' song.pk %}">
-                    <i class="fa fa-pencil-square">Edit</i>
+                <a href="{% url 'songs:song_torate' id=song.pk %}">
+                    <i class="fa fa-pencil-square">Rate</i>
                 </a>
             </div>
         </h2>
@@ -23,7 +25,11 @@
             <p class="lead">Length</p>
             <p>{{song.length}}</p>
         </div>
-    </div>
+
+
+
+
+
     <div class="row">
         <div class="col-md-6 col-md-offset-1">
             {% video song.video as my_video %}

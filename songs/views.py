@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Song, Rate, Play
 from core.models import MyUser
 from .forms import SongForm
+from .filters import SongFilter
 from django.http import response
 from music.conf import anti_spider
 
@@ -20,19 +21,10 @@ def song_list(request):
                     " was not found on this server.</p>"
         )
 
-    songs = Song.objects.all()
-
-    query = request.GET.get("q")
-    if query:
-        # artists = Artist.objects.filter(name__icontains=query)
-        songs = songs.filter(
-            Q(name__icontains=query) 
-            # Q(artists__in=artists)
-        )
-        songs = songs.distinct()
+    f = SongFilter(request.GET, queryset=Song.objects.all())
 
     context = {
-        "songs": songs,
+        "filter": f,
     }
 
     return render(request, "songs/song_list.html", context)

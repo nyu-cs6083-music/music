@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
-from . models import Album
+from .models import Album
+from .filters import AlbumFilter
 from django.http import response
 from music.conf import anti_spider
 from django.contrib.auth.decorators import login_required
@@ -16,11 +17,9 @@ def album_list(request):
                     " was not found on this server.</p>"
         )
 
-    albums = Album.objects.all()
-
+    f = AlbumFilter(request.GET, queryset=Album.objects.all())
     context = {
-        "albums":albums
-
+        "filter": f,
     }
 
     return render(request, "albums/album_list.html", context)

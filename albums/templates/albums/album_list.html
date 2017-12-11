@@ -1,18 +1,59 @@
 {% extends "core/base.html" %}
-
+{% block title %}Album List{% endblock %}
 {% block content %}
-<div class="jumbotron">
-  <h1>
-    Albums THIS IS LIST
-  </h1>
-</div>
+    <h1 class="page-header">Albums List</h1>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-0">
+            <form class="form-inline" action="" method="get" id="filters">
+                <div class="form-group">
+                    {{ filter.form.as_p }}
+                    <button class="btn btn-default" type="submit">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        Search
+                    </button>
+                </div>
 
+            </form>
 
-{% for albums in albums  %}
-<div class="albums">
-<p>  <a href="{{album.get_absolute_url}}">
-              <li>{{albums.album_name}}</a></a></li>
-{% endfor %}</p>
-
-</div>
+            <script LANGUAGE="JavaScript">
+                function doReset(){
+                    var _elements=document.getElementById("filters").elements,
+                        _elementsLen=_elements.length,
+                        _ei=null,
+                        i=0;
+                    for(;i<_elementsLen;i++){
+                        _ei=_elements[i];
+                        (_ei.type=="text"||_ei.type=="textarea")&&(_ei.value="");
+                    }
+                    window.location.href = '{% url 'playlists:playlist_list' uid=0 %}';
+                }
+            </script>
+            <button class="btn btn-default" onClick="doReset()" style="margin-top: 10px;">
+                <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                Clear
+            </button>
+        </div>
+    </div>
+    <div class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Release Time</th>
+                <th>Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for album in filter.qs %}
+                <tr>
+                    <td>{{ album.album_name }}</td>
+                    <td>{{ album.year_released }}</td>
+                    <td>
+                        <a href="{{ album.get_absolute_url }}">
+                        <button class="btn btn-info">Detail</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </div>
 {% endblock content %}

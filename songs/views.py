@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse,response
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
@@ -7,7 +7,6 @@ from .models import Song, Rate, Play
 from core.models import MyUser
 from .forms import SongForm, RateForm
 from .filters import SongFilter
-from django.http import response
 from music.conf import anti_spider
 
 
@@ -30,6 +29,7 @@ def song_list(request):
     return render(request, "songs/song_list.html", context)
 
 
+@login_required
 def song_detail(request, id):
 
     if anti_spider(request):
@@ -40,14 +40,25 @@ def song_detail(request, id):
         )
 
     song = get_object_or_404(Song, pk=id)
+
+    try:
+        rate = Rate.objects.get(user=request.user.myuser, song=song)
+        scores = [False for i in range(5)]
+        scores[rate.score-1] = True
+    except Rate.DoesNotExist:
+        score = [False for i in range(5)]
+        scores[0] = True
+
     context = {
         "song": song,
+        "scores": scores,
     }
 
     # return HttpResponse("song details!")
     return render(request, "songs/song_detail.html", context)
 
 
+@login_required
 def song_play(request, id, ptype, sid):
     try:
         song = Song.objects.get(pk=id)
@@ -75,6 +86,7 @@ def song_play(request, id, ptype, sid):
     return render(request, "songs/song_play.html", context)
 
 
+@login_required
 def song_new(request):
     if request.method == "POST":
         form = SongForm(request.POST)
@@ -92,7 +104,8 @@ def song_new(request):
     return render(request, "songs/song_rate.html", context)
 
 
-def song_edit (request, id):
+@login_required
+def song_edit(request, id):
     song = get_object_or_404(Song, pk=id)
 
     if request.method == "POST":
@@ -132,30 +145,21 @@ def play_list(request, id):
 
 
 @login_required
-def song_torate (request, id):
-    song = get_object_or_404(Song, pk=id)
-    try:
-        rate = Rate.objects.get(user=request.user.myuser, song=song)
-    except Rate.DoesNotExist:
-        rate = Rate(user=request.user.myuser, song=song, score=1)
-
+def song_torate(request):
+    user = request.user.myuser
     if request.method == 'POST':
-        form = RateForm(request.POST, instance=rate)
-        if form.is_valid():
-            rate = form.save();
-            rate.creator = request.user.myuser
-            rate.save()
-            messages.success(request, "Rate success!")
-            return redirect("songs:song_detail", id=song.pk)
-    else:
-        form = RateForm(instance=rate)
+        songid = request.POST.get('songid', '')
+        try:
+            rate = Rate.objects.get(user=request.user.myuser, song_id=songid)
+        except Rate.DoesNotExist:
+            rate = Rate(user=request.user.myuser, song_id=songid, score=1)
+        score = request.POST.get('score', '')
+        rate.score = score
+        rate.save()
 
-    context = {
-        "form": form,
-        "song": song,
-    }
+        return JsonResponse({'state': 1})
 
-    return render(request, "songs/song_rate.html", context)
+    return JsonResponse({'state': -1})
 
 
 

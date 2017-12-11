@@ -16,6 +16,7 @@ class PlaylistForm(forms.ModelForm):
         self.fields["song"].widget = forms.widgets.CheckboxSelectMultiple()
         self.fields["song"].help_text = ""
         self.fields["song"].queryset = Song.objects.all()
+
 """
     def save(self, user, commit=True):
         playlist = super(PlaylistForm, self).save(commit=False)

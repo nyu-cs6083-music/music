@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Song, Play
+from . models import Song, Play, Rate
 
 class SongAdmin(admin.ModelAdmin):
     search_fields = [
@@ -19,6 +19,14 @@ class PlayAdmin(admin.ModelAdmin):
         "timestamp",
     ]
 
+class RateAdmin (admin.ModelAdmin):
+    list_display = [
+        "user",
+        "song",
+        "score",
+    ]
+
 admin.site.register(Song, SongAdmin)
 admin.site.register(Play, PlayAdmin)
+admin.site.register(Rate, RateAdmin)
 

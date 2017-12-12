@@ -46,7 +46,7 @@ def song_detail(request, id):
         scores = [False for i in range(5)]
         scores[rate.score-1] = True
     except Rate.DoesNotExist:
-        score = [False for i in range(5)]
+        scores = [False for i in range(5)]
         scores[0] = True
 
     context = {
@@ -149,11 +149,19 @@ def song_torate(request):
     user = request.user.myuser
     if request.method == 'POST':
         songid = request.POST.get('songid', '')
-        try:
-            rate = Rate.objects.get(user=request.user.myuser, song_id=songid)
-        except Rate.DoesNotExist:
-            rate = Rate(user=request.user.myuser, song_id=songid, score=1)
         score = request.POST.get('score', '')
+        try:
+            rate = Rate.objects.get(user=user, song_id=songid)
+            diff = int(score) - rate.score
+            cnt = 0
+        except Rate.DoesNotExist:
+            rate = Rate(user=user, song_id=songid, score=1)
+            diff = score
+            cnt = 1
+        song = Song.objects.get(pk=songid)
+        song.score = song.score + diff
+        song.count = song.count + cnt
+        song.save()
         rate.score = score
         rate.save()
 

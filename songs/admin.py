@@ -7,8 +7,8 @@ class SongAdmin(admin.ModelAdmin):
     ]
 
     list_display = [
+        "name",
         "get_artist_names",
-        "name", 
         "length",
     ]
 

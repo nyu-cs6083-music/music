@@ -85,21 +85,26 @@
     </div>
     <div class="row">
         <div class="col-md-5 col-offset-1">
-            <p class="lead">Artist</p>
-            <p>{{song.get_artist_names}}</p>
+            <p class="lead">Artist:</p>
+            <p>{{ song.get_artist_names }}</p>
         </div>
     </div>
     <div class="row">
         <div class="col-md-5 col-offset-1">
-            <p class="lead">Length</p>
-            <p>{{song.length}}</p>
+            <p class="lead">Length:</p>
+            <p>{{ song.length }}</p>
         </div>
     </div>
-
     <div class="row">
-        <div class="col-md-6 col-md-offset-1">
+        <div class="col-md-5 col-offset-1">
+            <p class="lead">Average Rate:</p>
+                {{ song.get_average_rate }}
+        </div>
+    </div>
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-md-6 col-md-offset-4">
             {% video song.video as my_video %}
-            {% video my_video "large" %}
+            {% video my_video "small" %}
             {% endvideo %}
         </div>
 

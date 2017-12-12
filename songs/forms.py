@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Song
+from .models import Song, Rate
 from core.forms import BootstrapFormMixin
 
 class SongForm (BootstrapFormMixin, forms.ModelForm):
@@ -13,6 +13,15 @@ class SongForm (BootstrapFormMixin, forms.ModelForm):
             "artists",
             "video",
         )
+
+
+class RateForm(forms.ModelForm):
+    class Meta:
+        model = Rate
+        fields = ("score",)
+
+    def __init__(self, *args, **kwargs):
+        super(RateForm, self).__init__(*args, **kwargs)
 
   
 

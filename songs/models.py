@@ -4,17 +4,23 @@ from music import conf
 from embed_video.fields import EmbedVideoField
 
 class Song(models.Model):
-    #song name
+    # song name
     name = models.CharField(max_length=100)
-    #song length
+    # song length
     length = models.DurationField()
-    #song artists
+    # song artists
     artists = models.ForeignKey("artists.Artist", related_name="song")
-    #song url
+    # song url
     video = EmbedVideoField(verbose_name='My video',
                             help_text='This is a help text')
-    #song time
+    # song time
     year_released = models.DateField(max_length=8, auto_now=True)
+
+    # song rate number
+    count = models.IntegerField(default=0)
+    # song rate score
+    score = models.IntegerField(default=0)
+
     class Meta:
         ordering = ["name"]
 
@@ -30,12 +36,17 @@ class Song(models.Model):
     def get_absolute_url(self):
         return reverse("songs:song_detail", kwargs={"id":self.pk})
 
+    def get_average_rate(self):
+        return str(1.0*self.score/self.count if self.count != 0 else 0.0)
 
 class Rate(models.Model):
     user = models.ForeignKey('core.MyUser', related_name='rate')
     song = models.ForeignKey('Song', related_name='rate')
     score = models.IntegerField(default=0, choices=conf.RATESCORE.choice())
     timestamp = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'song')
 
 
 class Play(models.Model):

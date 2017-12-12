@@ -2,6 +2,7 @@ from django.forms import widgets
 from django import forms
 from .models import MyUser, User
 
+
 class BootstrapFormMixin(object):
 
     def __init__(self, *args, **kwargs):

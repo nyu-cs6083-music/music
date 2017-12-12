@@ -7,7 +7,6 @@
         {% block title %} {% endblock title %}
     </title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-theme.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-confirm.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery-confirm.js' %}"></script>
@@ -64,9 +63,10 @@
                                     </button>
 
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ user.myuser.get_absolute_url }}">My Profile</a></li>
+                                        <li><a href="{{ request.user.myuser.get_absolute_url }}">My Profile</a></li>
                                         <li><a href="{% url 'core:follow_list' %}">My Follow</a></li>
                                         <li><a href="{% url 'core:like_list' %}">My Like</a></li>
+                                        <li><a href="{% url 'songs:play_list' id=request.user.myuser.pk %}">My Play</a></li>
                                         <li><a href="{% url 'playlists:playlist_list' uid=request.user.myuser.pk%}">My Playlist</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="{% url 'core:set_password' %}">Reset Password</a></li>

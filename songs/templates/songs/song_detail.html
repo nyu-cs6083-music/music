@@ -5,29 +5,106 @@
     <div class="row">
         <h2>
             Song: {{song.name}}
+            <script>
+                function getCookie(name) {
+                    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+                    if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+                    else return null;
+                };
+                function torate() {
+                    $.ajaxSetup({
+                        headers: {
+                                "X-CSRFToken": getCookie("csrftoken")
+                                }
+                    });
+                    $.confirm({
+                        title: 'Rate',
+                        content: '' +
+                            '<form action="" method="POST" class="input_form">'+
+                            '<div class="form-group">'+
+                            '<label class="control-label  " for="id_score">Score</label>'+
+                            '<div class=" ">'+
+                            '<select class=" form-control" id="id_score" name="score">'+
+                            {% for score in scores %}
+                                {% if score %}
+                                    '<option value="{{ forloop.counter }}" selected="selected" >{{ forloop.counter }}</option>'+
+                                {% else %}
+                                    '<option value="{{ forloop.counter }}">{{ forloop.counter }}</option>'+
+                                {% endif %}
+                            {% endfor %}
+                            '</select>'+
+                            '</div>'+
+                            '</div>'+
+                            '</form>',
+                        buttons: {
+                            formSubmit: {
+                                text: 'Submit',
+                                btnClass: 'btn-blue',
+                                action: function () {
+                                    var score = this.$content.find('#id_score').val();
+                                    $.post("{% url 'songs:song_torate' %}", {
+                                            'songid':{{ song.pk }},
+                                            'score': score,
+                                        },function(ret){
+                                            if(ret['state'] == 1) {
+                                                $.confirm({
+                                                    title: 'Thank you!',
+                                                    content: 'Rate Successfully!',
+                                                    buttons: {
+                                                        confirm: function () {
+                                                            //close
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                $.confirm({
+                                                    title: 'Sorry!',
+                                                    content: 'Fail to Rate!',
+                                                    buttons: {
+                                                        confirm: function () {
+                                                            //close
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    )
+                                }
+                            },
+                            cancel: function () {
+                                //close
+                            },
+                        }
+                    });
+                };
+            </script>
             <div class="pull-right">
-                <a href="{% url 'songs:song_edit' song.pk %}">
-                    <i class="fa fa-pencil-square">Edit</i>
-                </a>
+                <button class="btn btn-danger" onclick="torate()">Rate</button>
             </div>
         </h2>
     </div>
     <div class="row">
         <div class="col-md-5 col-offset-1">
-            <p class="lead">Artist</p>
-            <p>{{song.get_artist_names}}</p>
-        </div>
-    </div>
-        <div class="row">
-        <div class="col-md-5 col-offset-1">
-            <p class="lead">Length</p>
-            <p>{{song.length}}</p>
+            <p class="lead">Artist:</p>
+            <p>{{ song.get_artist_names }}</p>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 col-md-offset-1">
+        <div class="col-md-5 col-offset-1">
+            <p class="lead">Length:</p>
+            <p>{{ song.length }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 col-offset-1">
+            <p class="lead">Average Rate:</p>
+                {{ song.get_average_rate }}
+        </div>
+    </div>
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-md-6 col-md-offset-4">
             {% video song.video as my_video %}
-            {% video my_video "large" %}
+            {% video my_video "small" %}
             {% endvideo %}
         </div>
 

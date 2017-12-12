@@ -1,16 +1,24 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import response
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-
+from music.conf import anti_spider
 from .models import Artist
 from core.models import Like
 from .forms import ArtistForm
 
+
 @login_required
 def artist_list(request):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
 
     artists = Artist.objects.all()
 
@@ -27,8 +35,16 @@ def artist_list(request):
     # return HttpResponse("Here be I.")
     return render (request, "artists/artist_list.html", context)
 
-@login_required
+
 def artist_detail(request, id):
+
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
     artist = get_object_or_404(Artist, pk=id)
     user = request.user
     state = 'unlike'

@@ -16,10 +16,14 @@ class Song(models.Model):
     # song time
     year_released = models.DateField(max_length=8, auto_now=True)
 
+    play_count=models.IntegerField(default=0)
+
     # song rate number
     count = models.IntegerField(default=0)
     # song rate score
     score = models.IntegerField(default=0)
+
+
 
     class Meta:
         ordering = ["name"]
@@ -38,6 +42,7 @@ class Song(models.Model):
 
     def get_average_rate(self):
         return str(1.0*self.score/self.count if self.count != 0 else 0.0)
+
 
 class Rate(models.Model):
     user = models.ForeignKey('core.MyUser', related_name='rate')

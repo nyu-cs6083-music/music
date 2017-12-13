@@ -71,11 +71,15 @@ def song_play(request, id, ptype, sid):
                     ptype=ptype,
                     sourceid=sid)
         play.save()
+        song.play_count=song.play_count+1
+        song.save()
     elif ptype == '2':
         play = Play(user=request.user.myuser,
                     song=song,
                     ptype=ptype)
         play.save()
+        song.play_count = song.play_count + 1
+        song.save()
     else:
         raise Http404
 
@@ -159,8 +163,8 @@ def song_torate(request):
             diff = score
             cnt = 1
         song = Song.objects.get(pk=songid)
-        song.score = song.score + diff
-        song.count = song.count + cnt
+        song.score = song.score + int(diff)
+        song.count = song.count + int(cnt)
         song.save()
         rate.score = score
         rate.save()

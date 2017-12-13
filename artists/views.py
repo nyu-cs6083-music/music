@@ -6,13 +6,15 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from music.conf import anti_spider
 from .models import Artist
+from core.models import MyUser
 from core.models import Like
 from .forms import ArtistForm
+from django.core.cache import cache
 
 
 @login_required
 def artist_list(request):
-
+    user = request.user.myuser
     if anti_spider(request):
         return response.HttpResponseNotFound(
             content="<h1>Not Found</h1><p>The requested URL " +
@@ -29,10 +31,20 @@ def artist_list(request):
         )
         artists = artists.distinct()
 
+    datas = cache.get(user.key("like"))
+    if not datas:
+        datas = map(
+            lambda x: {
+                "artist": x,
+                "status": (True if Like.objects.filter(user=user, artist=x) else False),
+            }, artists)
+
+        cache.set(user.key("like"), datas, 5 * 60)
+
     context = {
-        "artists": artists,
+        "datas": datas,
     }
-    # return HttpResponse("Here be I.")
+
     return render (request, "artists/artist_list.html", context)
 
 

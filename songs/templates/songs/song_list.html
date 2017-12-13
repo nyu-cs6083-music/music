@@ -33,14 +33,16 @@
                 </button>
             </div>
         </div>
-        <table class="table table-hover">
+        <table class="table table-hover"  style="margin-top: 50px;">
 
         {% if filter.qs %}
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Released Time</th>
-                    <th>Detial</th>
+                    <th>Play Times</th>
+                    <th>Rates</th>
+                    <th>Detail</th>
                     <th>Play</th>
                     <th>Addlist</th>
                 </tr>
@@ -50,6 +52,8 @@
                 <tr>
                     <td>{{ song.name }}</td>
                     <td>{{ song.year_released }}</td>
+                    <td>{{ song.play_count }}</td>
+                    <td>{{ song.get_average_rate }}</td>
                     <td>
                         <a href="{{ song.get_absolute_url }}">
                         <button class="btn btn-info">Detail</button>
@@ -61,7 +65,9 @@
                         </a>
                     </td>
                     <td>
+                        <a href="{% url 'playlists:playlist_new'%}" class="">
                         <button class="btn btn-success">Addlist</button>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

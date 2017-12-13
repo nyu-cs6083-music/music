@@ -98,12 +98,6 @@
           });
         });
 
-
-        function getCookie(name) {
-            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg)) return unescape(arr[2]);
-            else return null;
-        };
         $(document).ready(function(){
             $.ajaxSetup({
             headers: {
@@ -115,7 +109,7 @@
                     'userid':{{ user.pk }}
                 },
                 function(ret){
-                    if(ret['state'] == -1) {
+                    if(ret['state'] == 1) {
                         $.confirm({
                             title: 'Congratuation!',
                             content: 'Unfollow the user successfully!',

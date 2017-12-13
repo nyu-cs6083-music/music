@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from django.contrib import auth
 from django.http import HttpResponseRedirect, JsonResponse, response
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Q
 from .forms import MyUserForm
 from music.conf import anti_spider
 from django.contrib import messages
@@ -20,7 +19,6 @@ def index(request):
     user = request.user if request.user.is_authenticated() else None
     if user:
         user = user.myuser
-    if user:
         now = datetime.date.today()
         start = now - datetime.timedelta(days=1)
 
@@ -233,20 +231,6 @@ def user_follow(request, id):
 
 
 @login_required
-def like_artist(request):
-    user = request.user
-    if request.method == 'POST':
-        artistid = request.POST.get('artistid', '')
-        artist = Artist.objects.get(pk=artistid)
-        if Like.objects.filter(user=user.myuser, artist=artist):
-            return JsonResponse({'state': -1})
-        else:
-            like = Like(user=user.myuser, artist=artist)
-            like.save()
-
-    return JsonResponse({'state': 1})
-
-@login_required
 def like_list(request):
 
     if anti_spider(request):
@@ -263,6 +247,34 @@ def like_list(request):
         "artists": artists,
     }
     return render(request, "core/like_list.html", context)
+
+
+@login_required
+def like_artist(request):
+    user = request.user.myuser
+    if request.method == 'POST':
+        artistid = request.POST.get('artistid', '')
+        artist = Artist.objects.get(pk=artistid)
+        if Like.objects.filter(user=user, artist=artist):
+            return JsonResponse({'state': -1})
+        else:
+            like = Like(user=user, artist=artist)
+            like.save()
+
+    return JsonResponse({'state': 1})
+
+
+@login_required
+def unlike_artist(request):
+    user = request.user.myuser
+    if request.method == 'POST':
+        artistid = request.POST.get('artistid', '')
+        artist = Artist.objects.get(pk=artistid)
+        Like.objects.filter(user=user, artist=artist).delete()
+        return JsonResponse({'state': 1})
+
+    return JsonResponse({'state': -1})
+
 
 @login_required
 def follow_list(request):
@@ -289,19 +301,22 @@ def follow_user(request):
     if request.method == 'POST':
         userid = request.POST.get('userid', '')
         user = MyUser.objects.get(pk=userid)
-        if Follow.objects.filter( fan=userself,star=user):
-            return JsonResponse({'state': -1}) #followed
+        if Follow.objects.filter(fan=userself, star=user):
+            return JsonResponse({'state': -1})
         else:
-            follow = Follow(fan=userself,star=user)
+            follow = Follow(fan=userself, star=user)
             follow.save()
 
     return JsonResponse({'state': 1})
 
+
+@login_required
 def unfollow_user(request):
     userself = request.user.myuser
     if request.method == 'POST':
         userid = request.POST.get('userid', '')
         user = MyUser.objects.get(pk=userid)
-        Follow.objects.filter(fan=userself,star=user).delete()
+        Follow.objects.filter(fan=userself, star=user).delete()
+        return JsonResponse({'state': 1})
 
     return JsonResponse({'state': -1})

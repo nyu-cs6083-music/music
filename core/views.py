@@ -18,7 +18,8 @@ from django.core.cache import cache
 
 def index(request):
     user = request.user if request.user.is_authenticated() else None
-    user = user.myuser
+    if user:
+        user = user.myuser
     if user:
         now = datetime.date.today()
         start = now - datetime.timedelta(days=1)

@@ -38,8 +38,7 @@ def artist_list(request):
                 "artist": x,
                 "status": (True if Like.objects.filter(user=user, artist=x) else False),
             }, artists)
-
-        cache.set(user.key("like"), datas, 5 * 60)
+        cache.set(user.key("like"), list(datas), 5 * 60)
 
     context = {
         "datas": datas,

@@ -64,6 +64,37 @@
                 }
             )
           });
+            $("#unlike").click(function(){
+                $.post("{% url 'core:unlike_artist' %}", {
+                    'artistid':{{ artist.pk }}
+                },
+                function(ret){
+                    if(ret['state'] == 1) {
+                        $.confirm({
+                            title: 'Congratuation!',
+                            content: 'Unike the artist successfully!',
+                            buttons: {
+                                confirm: function () {
+                                    $.alert('Confirmed!');
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    } else {
+                        $.confirm({
+                            title: 'Sorry!',
+                            content: 'Fail to unlike the artist!',
+                            buttons: {
+                                confirm: function () {
+                                    $.alert('Confirmed!');
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            )
+          });
         });
     </script>
 {% endblock content %}      

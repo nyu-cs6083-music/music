@@ -97,6 +97,48 @@
             )
           });
         });
+
+        $(document).ready(function(){
+            $.ajaxSetup({
+            headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                    }
+                });
+            $("#unfollow").click(function(){
+                $.post("{% url 'core:unfollow_user' %}", {
+                    'userid':{{ user.pk }}
+                },
+                function(ret){
+                    if(ret['state'] == 1) {
+                        $.confirm({
+                            title: 'Congratuation!',
+                            content: 'Unfollow the user successfully!',
+                            buttons: {
+                                confirm: function () {
+                                    $.alert('Confirmed!');
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    } else {
+                        $.confirm({
+                            title: 'Sorry!',
+                            content: 'Fail to unfollow the user!',
+                            buttons: {
+                                confirm: function () {
+                                    $.alert('Confirmed!');
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            )
+        });
+    });
+
+
+
     </script>
 {% endblock content %}
 

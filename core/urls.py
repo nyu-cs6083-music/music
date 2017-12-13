@@ -12,8 +12,10 @@ urlpatterns = [
     url(r'^user_list/$', views.user_list, name="user_list"),
     url(r'^(?P<id>\d+)/detail/$', views.user_detail, name="user_detail"),
     url(r'^(?P<id>\d+)/follow/$', views.user_follow, name="user_follow"),
-    url(r'^user_like/$', views.like_artist, name="like_artist"),
+    url(r'^like_artist/$', views.like_artist, name="like_artist"),
+    url(r'^unlike_artist/$', views.unlike_artist, name="unlike_artist"),
     url(r'^like_list/$', views.like_list, name="like_list"),
     url(r'^follow_list/$', views.follow_list, name="follow_list"),
     url(r'^follow_user/$', views.follow_user, name="follow_user"),
+    url(r'^unfollow_user/$', views.unfollow_user, name="unfollow_user"),
 ]

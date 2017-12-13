@@ -21,6 +21,16 @@ def artist_list(request):
         )
 
     artists = Artist.objects.all()
+    # user=request.user
+    # i=0;
+    # state=[]
+    # for artist in artists:
+    #     state.append('unlike')
+    #
+    # for artist in artists:
+    #     if Like.objects.filter(user=user.myuser, artist=artist):
+    #         state[i] = 'like'
+    #     i=i+1
 
     query = request.GET.get("q")
     if query:

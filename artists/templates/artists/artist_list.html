@@ -15,6 +15,7 @@
             </thead>
             <tbody>
             {% for artist in artists %}
+
                 <tr>
                     <td>{{artist.name}}</td>
                     <td>
@@ -22,10 +23,63 @@
                         <button class="btn btn-info">Detail</button>
                         </a>
                     </td>
+                    {% if state == 'like' %}
                     <td>
-                        <button class="btn btn-success">Like</button>
+                    <button class="btn btn-primary" type="submit" id="unlike">Unlike</button>
                     </td>
+                    {% else %}
+                    <td>
+                    <button class="btn btn-primary" type="submit" id="like">Like</button>
+                    </td>
+                    {% endif %}
+
                 </tr>
+                <script>
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+            else return null;
+        };
+        $(document).ready(function(){
+            $.ajaxSetup({
+            headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                    }
+                });
+            $("#like").click(function(){
+                alert('{{ artist.pk }}');
+                $.post("{% url 'core:like_artist' %}", {
+                    'artistid':{{ artist.pk }}
+                },
+                function(ret){
+                    if(ret['state'] == 1) {
+                        $.confirm({
+                            title: 'Congratuation!',
+                            content: 'Like the artist successfully!',
+                            buttons: {
+                                confirm: function () {
+                                    $.alert('Confirmed!');
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    } else {
+                        $.confirm({
+                            title: 'Sorry!',
+                            content: 'Fail to like the artist!',
+                            buttons: {
+                                confirm: function () {
+                                    $.alert('Confirmed!');
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            )
+          });
+        });
+    </script>
             {% endfor %}
             </tbody>
         {% else %}
@@ -34,4 +88,5 @@
         <hr>
         </table>
     </div>
+
 {% endblock content %}

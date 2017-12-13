@@ -33,7 +33,11 @@
                         </a>
                     </td>
                     <td>
-                        <button class="btn btn-success" type="submit" id="follow">Follow</button>
+                        {% if data.status %}
+                            <button class="btn btn-success" type="submit" id="follow">Unfollow</button>
+                        {% else %}
+                            <button class="btn btn-success" type="submit" id="follow">Follow</button>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

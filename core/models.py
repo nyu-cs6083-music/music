@@ -23,8 +23,8 @@ class MyUser(models.Model):
     def get_follow(self):
         return "\n".join([s.user.username for s in self.star.all()])
 
-    def key(self):
-        return "user__" + str(self.pk)
+    def key(self, type):
+        return "user__" + str(self.pk) + type
 
 
 class Like(models.Model):

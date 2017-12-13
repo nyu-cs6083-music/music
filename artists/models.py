@@ -12,9 +12,6 @@ class Artist (models.Model):
     def __str__(self):
         return self.name
 
-    def get_song_names(self):
-        song_names = [song.name for song in self.song_set.all()]
-        return ", ".join(song_names)
-
     def get_absolute_url(self):
         return reverse("artists:artist_detail", kwargs={"id":self.pk})
+

@@ -18,20 +18,21 @@ from django.core.cache import cache
 
 def index(request):
     user = request.user if request.user.is_authenticated() else None
+    user = user.myuser
     if user:
         now = datetime.date.today()
         start = now - datetime.timedelta(days=1)
 
-        res = cache.get(user.myuser.key())
+        res = cache.get(user.key(""))
         if not res:
             res = {}
             res['playlist'] = len(Playlist.objects.filter(year_released__gt=start))
-            res['artist'] = len(user.myuser.like.filter(timestamp__gt=start))
-            res['user'] = len(user.myuser.star.filter(timestamp__gt=start))
+            res['artist'] = len(user.like.filter(timestamp__gt=start))
+            res['user'] = len(user.star.filter(timestamp__gt=start))
             res['song'] = len(Song.objects.filter(year_released__gt=start))
             res['album'] = len(Album.objects.filter(year_released__gt=start))
 
-            cache.set(user.myuser.key(), res, 12 * 60 * 60)
+            cache.set(user.key(""), res, 12 * 60 * 60)
     else:
         res = {
             'playlist': 0,
@@ -189,7 +190,7 @@ def user_edit(request):
 
 @login_required
 def user_list(request):
-
+    user = request.user.myuser
     if anti_spider(request):
         return response.HttpResponseNotFound(
             content="<h1>Not Found</h1><p>The requested URL " +
@@ -198,20 +199,20 @@ def user_list(request):
         )
 
     users = MyUser.objects.all()
-    query = request.GET.get("q")
-    if query:
-        users = users.filter(
-            Q(nickname__icontains=query)
-        )
-        users = users.distinct()
     now = datetime.date.today()
     start = now - datetime.timedelta(days=3)
-    datas = map(
-        lambda x: {
-            "user": x,
-            "num": (lambda y: len(y) if y else 0)(x.playlist.all()),
-            "new": (lambda y: len(y) if y else 0)(x.playlist.filter(year_released__gt=start)),
-        },users)
+
+    datas = cache.get(user.key("list"))
+    if not datas:
+        datas = map(
+            lambda x: {
+                "user": x,
+                "num": (lambda y: len(y) if y else 0)(x.playlist.all()),
+                "new": (lambda y: len(y) if y else 0)(x.playlist.filter(year_released__gt=start)),
+                "status": (True if Follow.objects.filter(fan=user, star=x) else False),
+            }, users)
+
+        cache.set(user.key("list"), datas, 5 * 60)
 
     context = {
         "datas": datas,

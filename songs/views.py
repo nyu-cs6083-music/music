@@ -163,8 +163,8 @@ def song_torate(request):
             diff = score
             cnt = 1
         song = Song.objects.get(pk=songid)
-        song.score = song.score + diff
-        song.count = song.count + cnt
+        song.score = song.score + int(diff)
+        song.count = song.count + int(cnt)
         song.save()
         rate.score = score
         rate.save()

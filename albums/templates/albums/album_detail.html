@@ -1,16 +1,16 @@
 {% extends "core/base.html" %}
-{% block title %}{{ albums.album_name }}{% endblock %}
+{% block title %}{{ album.album_name }}{% endblock %}
 {% block content %}
-    <h1 class="page-header">{{ albums.album_name }}</h1>
+    <h1 class="page-header">{{ album.album_name }}</h1>
     <div class="row">
         <div class="col-md-6 col-md-offset-1">
             <li>
                 <a href="{{album.get_absolute_url}}">
-                {{ albums.album_name }}
+                {{ album.album_name }}
                 </a>
             </li>
             <li>
-                {{albums.year_released}}
+                {{album.year_released}}
             </li>
         </div>
     </div>

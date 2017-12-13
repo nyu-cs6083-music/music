@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^like_list/$', views.like_list, name="like_list"),
     url(r'^follow_list/$', views.follow_list, name="follow_list"),
     url(r'^follow_user/$', views.follow_user, name="follow_user"),
+    url(r'^unfollow_user/$', views.unfollow_user, name="unfollow_user"),
 ]

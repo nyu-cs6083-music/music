@@ -290,9 +290,18 @@ def follow_user(request):
         userid = request.POST.get('userid', '')
         user = MyUser.objects.get(pk=userid)
         if Follow.objects.filter( fan=userself,star=user):
-            return JsonResponse({'state': -1})
+            return JsonResponse({'state': -1}) #followed
         else:
             follow = Follow(fan=userself,star=user)
             follow.save()
 
     return JsonResponse({'state': 1})
+
+def unfollow_user(request):
+    userself = request.user.myuser
+    if request.method == 'POST':
+        userid = request.POST.get('userid', '')
+        user = MyUser.objects.get(pk=userid)
+        Follow.objects.filter(fan=userself,star=user).delete()
+
+    return JsonResponse({'state': -1})

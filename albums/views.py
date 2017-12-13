@@ -33,11 +33,10 @@ def album_detail(request, id):
                     request.path_info +
                     " was not found on this server.</p>"
         )
-
-    album = Album.objects.get(pk=id)
+    album = get_object_or_404(Album, pk=id)
 
     context = {
-        "album": album
+        "album": album,
 
     }
 

@@ -34,7 +34,6 @@
                     }
                 });
             $("#like").click(function(){
-                alert('{{ artist.pk }}');
                 $.post("{% url 'core:like_artist' %}", {
                     'artistid':{{ artist.pk }}
                 },

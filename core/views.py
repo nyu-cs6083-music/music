@@ -213,7 +213,7 @@ def user_list(request):
                 "status": (True if Follow.objects.filter(fan=user, star=x) else False),
             }, users)
 
-        cache.set(user.key("list"), datas, 5 * 60)
+        cache.set(user.key("list"), list(datas), 5 * 60)
 
     context = {
         "datas": datas,

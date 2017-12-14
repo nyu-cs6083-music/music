@@ -91,46 +91,6 @@ def song_play(request, id, ptype, sid):
 
 
 @login_required
-def song_new(request):
-    if request.method == "POST":
-        form = SongForm(request.POST)
-        if form.is_valid():
-            song = form.save()
-            messages.success(request, "Song added!")
-            return redirect("songs:song_detail", id=song.pk)
-    else:
-        form = SongForm()
-
-    context = {
-        "form":form,
-    }
-
-    return render(request, "songs/song_rate.html", context)
-
-
-@login_required
-def song_edit(request, id):
-    song = get_object_or_404(Song, pk=id)
-
-    if request.method == "POST":
-        form = SongForm(request.POST, instance=song)
-        if form.is_valid():
-            song = form.save()
-            messages.success(request, "Song updated!")
-            return redirect("songs:song_detail", id=song.pk)
-
-    else: 
-        form = SongForm(instance=song)
-
-    context = {
-        "form": form, 
-        "song": song,
-    }
-
-    return render(request, "songs/song_rate.html", context)
-
-
-@login_required
 def play_list(request, id):
 
     try:

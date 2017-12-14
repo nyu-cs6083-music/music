@@ -297,6 +297,7 @@ def follow_user(request):
 
     return JsonResponse({'state': 1})
 
+@login_required
 def unfollow_user(request):
     userself = request.user.myuser
     if request.method == 'POST':
@@ -305,3 +306,4 @@ def unfollow_user(request):
         Follow.objects.filter(fan=userself,star=user).delete()
 
     return JsonResponse({'state': -1})
+

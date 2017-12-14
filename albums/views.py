@@ -27,6 +27,7 @@ def album_list(request):
     return render(request, "albums/album_list.html", context)
 
 
+@login_required
 def album_detail(request, id):
 
     if anti_spider(request):
@@ -45,14 +46,3 @@ def album_detail(request, id):
     }
 
     return render(request, "albums/album_detail.html", context)
-
-
-def album_edit(request):
-    albums = Album.objects.all()
-
-    context = {
-        "albums":albums
-
-    }
-
-    return render(request, "albums/album_list.html", context)

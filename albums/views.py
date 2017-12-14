@@ -17,9 +17,11 @@ def album_list(request):
                     " was not found on this server.</p>"
         )
 
+
     f = AlbumFilter(request.GET, queryset=Album.objects.all())
     context = {
         "filter": f,
+
     }
 
     return render(request, "albums/album_list.html", context)
@@ -37,6 +39,8 @@ def album_detail(request, id):
 
     context = {
         "album": album,
+        "songs": album.track.all(),
+
 
     }
 

@@ -9,7 +9,7 @@ class Album(models.Model):
     year_released = models.DateField(max_length=8, auto_now=True)
     track = models.ManyToManyField('songs.Song', related_name='album')
 
-    def __str__(self):
+    def __unicode__(self):
         return self.album_name
 
     def get_absolute_url(self):

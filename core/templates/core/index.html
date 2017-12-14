@@ -28,24 +28,30 @@
         <div class="col-md-5 col-md-offset-4">
             <ul class="list-group">
                 <li class="list-group-item">
-                        <a href="{% url 'artists:artist_list' %}">Artists</a>
-                        <span class="badge pull-right">{{ newalbums }} new</span>
+                    <a href="{% url 'artists:artist_list' %}">Artists</a>
+                    <span class="badge pull-right">{{ newalbums }} new</span>
                 </li>
                 <li class="list-group-item">
-                        <a href="{% url 'albums:album_list' %}">Albums</a>
+                    <a href="{% url 'albums:album_list' %}">Albums</a>
                     <span class="badge pull-right">{{ newartists }} new</span>
                 </li>
                 <li class="list-group-item">
-                        <a href="{% url 'playlists:playlist_list' uid=0 %}">Playlist</a>
-                        <span class="badge pull-right">{{ newplaylists }} new</span>
+                    <a href="{% url 'playlists:playlist_list' uid=0 %}">Playlist</a>
+                    <span class="badge pull-right">{{ newplaylists }} new</span>
+                    {% if user %}
+                        <span class="badge pull-right">{{ follow_playlists }} favorite</span>
+                    {% endif %}
                 </li>
                 <li class="list-group-item">
-                        <a href="{% url 'songs:song_list' %}">Songs</a>
-                        <span class="badge pull-right">{{ newsongs }} new</span>
+                    <a href="{% url 'songs:song_list' %}">Songs</a>
+                    <span class="badge pull-right">{{ newsongs }} new</span>
+                    {% if user %}
+                        <span class="badge pull-right">{{ like_songs }} favorite</span>
+                    {% endif %}
                 </li>
                 <li class="list-group-item">
-                        <a href="{% url 'core:follow_list' %}">Follows</a>
-                        <span class="badge pull-right">{{ newusers }} new</span>
+                    <a href="{% url 'core:follow_list' %}">Follows</a>
+                    <span class="badge pull-right">{{ newusers }} new</span>
                 </li>
 
             </ul>

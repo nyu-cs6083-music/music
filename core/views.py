@@ -26,9 +26,17 @@ def index(request):
         if not res:
             res = {}
             res['playlist'] = len(Playlist.objects.filter(year_released__gt=start))
+            res['follow_playlist'] = 0
+            user_follow_users = user.star.all()
+            for user_follow in user_follow_users:
+                res['follow_playlist'] += len(Playlist.objects.filter(creator=user_follow.star, year_released__gt=start))
             res['artist'] = len(user.like.filter(timestamp__gt=start))
             res['user'] = len(user.star.filter(timestamp__gt=start))
             res['song'] = len(Song.objects.filter(year_released__gt=start))
+            res['like_song'] = 0
+            user_like_artists = user.like.all()
+            for user_like in user_like_artists:
+                res['like_song'] += len(Song.objects.filter(artists=user_like.artist, year_released__gt=start))
             res['album'] = len(Album.objects.filter(year_released__gt=start))
 
             cache.set(user.key(""), res, 12 * 60 * 60)
@@ -39,6 +47,8 @@ def index(request):
             'user': 0,
             'song': 0,
             'album': 0,
+            'like_song': 0,
+            'follow_playlist': 0,
         }
 
     content = {
@@ -49,6 +59,8 @@ def index(request):
         'newusers': res['user'],
         'newsongs': res['song'],
         'newalbums': res['album'],
+        'like_songs': res['like_song'],
+        'follow_playlists': res['follow_playlist']
     }
     return render(request, "core/index.html", content)
 

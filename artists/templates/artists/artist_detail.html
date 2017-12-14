@@ -65,6 +65,52 @@
             )
           });
         });
+
+
+
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+            else return null;
+        };
+        $(document).ready(function(){
+            $.ajaxSetup({
+            headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                    }
+                });
+            $("#unlike").click(function(){
+                $.post("{% url 'artists:unlike_artist' %}", {
+                    'artistid':{{ artist.pk }}
+                },
+                function(ret){
+                    if(ret['state'] == -1) {
+                        $.confirm({
+                            title: 'Congratuation!',
+                            content: 'unlike the artist successfully!',
+                            buttons: {
+                                confirm: function () {
+                                    $.alert('Confirmed!');
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    } else {
+                        $.confirm({
+                            title: 'Sorry!',
+                            content: 'Fail to unlike the artist!',
+                            buttons: {
+                                confirm: function () {
+                                    $.alert('Confirmed!');
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            )
+          });
+        });
     </script>
 {% endblock content %}      
 

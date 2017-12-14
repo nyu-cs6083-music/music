@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^$', views.artist_list, name="artist_list"),
     url(r'^(?P<id>\d+)/detail$', views.artist_detail, name="artist_detail"),
     url(r'^(?P<id>\d+)/edit/$', views.artist_edit, name="artist_edit"),
+    url(r'^unlike_artist/$', views.unlike_artist, name="unlike_artist"),
 ]

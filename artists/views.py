@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import response
+from django.http import response, JsonResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -95,6 +95,16 @@ def artist_edit(request, id):
     }
 
     return render(request, "artists/artist_edit.html", context)
+
+def unlike_artist(request):
+    userself = request.user.myuser
+    if request.method == 'POST':
+        artistid = request.POST.get('artistid', '')
+        artist = Artist.objects.get(pk=artistid)
+        Like.objects.filter(user=userself,artist=artist).delete()
+
+    return JsonResponse({'state': -1})
+
 
 
 

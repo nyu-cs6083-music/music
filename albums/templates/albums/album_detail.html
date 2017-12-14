@@ -12,6 +12,14 @@
             <li>
                 {{album.year_released}}
             </li>
+            <li>Song:</li>
+            <ul>
+            {% for song in songs %}
+                <a href="{{ song.get_absolute_url }}" class="">
+                    <li>{{ song.name }}</li>
+                </a>
+            {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock content %}

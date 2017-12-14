@@ -174,6 +174,24 @@ def song_torate(request):
     return JsonResponse({'state': -1})
 
 
+@login_required
+def play_history(request):
+    if anti_spider(request):
+        return response.HttpResponseNotFound(
+            content="<h1>Not Found</h1><p>The requested URL " +
+                    request.path_info +
+                    " was not found on this server.</p>"
+        )
+
+    user = request.user.myuser
+    play = Play.objects.filter(user=user)
+    song = [p.song for p in play]
+    timestamp = [p.timestamp for p in play]
+    context = {
+        "song": song,
+        "timestamp": timestamp,
+    }
+    return render(request, "core/play_history.html", context)
 
 
 
